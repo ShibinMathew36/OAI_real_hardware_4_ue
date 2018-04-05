@@ -168,7 +168,7 @@ else:
     rue2.disk_image = GLOBALS.UE_IMG
     rue2.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
     rue2.adb_target = "adb-tgt"
-    rue2_enb1_rf = rue1.addInterface("enb2_rf")
+    rue2_enb1_rf = rue2.addInterface("enb2_rf")
 
     # Create the RF link between each Nexus 5 UE and eNodeB
     rflink1 = request.RFLink("rflink1")
