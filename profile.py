@@ -91,9 +91,12 @@ pc = portal.Context()
 #
 # Profile parameters.
 #
-pc.defineParameter("FIXED_UE", "Bind to a specific UE",
+pc.defineParameter("FIXED_UE1", "Bind to a specific UE",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue1').  Leave blank to let the mapping algorithm choose.")
+pc.defineParameter("FIXED_UE2", "Bind to a specific UE",
+                   portal.ParameterType.STRING, "", advanced=True,
+                   longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue2').  Leave blank to let the mapping algorithm choose.")
 pc.defineParameter("FIXED_ENB", "Bind to a specific eNodeB",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a PhantomNet eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
@@ -145,21 +148,35 @@ else:
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
     enb1_rue1_rf = enb1.addInterface("rue1_rf")
+    enb1_rue2_rf = enb1.addInterface("rue2_rf")
 
-    # Add an OTS (Nexus 5) UE
+    # Add an OTS (Nexus 5) UE 1
     rue1 = request.UE("rue1")
-    if params.FIXED_UE:
+    if params.FIXED_UE1:
         rue1.component_id = params.FIXED_UE
     rue1.hardware_type = GLOBALS.UE_HWTYPE
     rue1.disk_image = GLOBALS.UE_IMG
-    rue1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+    rue1.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
     rue1.adb_target = "adb-tgt"
     rue1_enb1_rf = rue1.addInterface("enb1_rf")
 
-    # Create the RF link between the Nexus 5 UE and eNodeB
+    # Add an OTS (Nexus 5) UE 2
+    rue2 = request.UE("rue2")
+    if params.FIXED_UE2:
+        rue2.component_id = params.FIXED_UE
+    rue2.hardware_type = GLOBALS.UE_HWTYPE
+    rue2.disk_image = GLOBALS.UE_IMG
+    rue2.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
+    rue2.adb_target = "adb-tgt"
+    rue2_enb1_rf = rue1.addInterface("enb2_rf")
+
+    # Create the RF link between each Nexus 5 UE and eNodeB
+    rflink1 = request.RFLink("rflink1")
+    rflink1.addInterface(enb1_rue1_rf)
+    rflink1.addInterface(rue1_enb1_rf)
     rflink2 = request.RFLink("rflink2")
-    rflink2.addInterface(enb1_rue1_rf)
-    rflink2.addInterface(rue1_enb1_rf)
+    rflink2.addInterface(enb1_rue2_rf)
+    rflink2.addInterface(rue2_enb1_rf)
 
     # Add a link connecting the NUC eNB and the OAI EPC node.
     epclink.addNode(enb1)
