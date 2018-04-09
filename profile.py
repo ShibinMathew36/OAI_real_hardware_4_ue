@@ -144,7 +144,7 @@ else:
         enb1.component_id = params.FIXED_ENB
     enb1.hardware_type = GLOBALS.NUC_HWTYPE
     enb1.disk_image = GLOBALS.OAI_ENB_IMG
-    enb1.Desire( "rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1 )
+    enb1.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
     connectOAI_DS(enb1, 0)
     enb1.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r ENB"))
     enb1_rue1_rf = enb1.addInterface("rue1_rf")
@@ -153,7 +153,7 @@ else:
     # Add an OTS (Nexus 5) UE 1
     rue1 = request.UE("rue1")
     if params.FIXED_UE1:
-        rue1.component_id = params.FIXED_UE
+        rue1.component_id = params.FIXED_UE1
     rue1.hardware_type = GLOBALS.UE_HWTYPE
     rue1.disk_image = GLOBALS.UE_IMG
     rue1.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
@@ -163,7 +163,7 @@ else:
     # Add an OTS (Nexus 5) UE 2
     rue2 = request.UE("rue2")
     if params.FIXED_UE2:
-        rue2.component_id = params.FIXED_UE
+        rue2.component_id = params.FIXED_UE2
     rue2.hardware_type = GLOBALS.UE_HWTYPE
     rue2.disk_image = GLOBALS.UE_IMG
     rue2.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
