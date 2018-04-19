@@ -101,8 +101,8 @@ pc.defineParameter("FIXED_UE3", "Bind to a specific UE",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue3').  Leave blank to let the mapping algorithm choose.")
 #pc.defineParameter("FIXED_UE4", "Bind to a specific UE",
- #                  portal.ParameterType.STRING, "", advanced=True,
-  #                 longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue4').  Leave blank to let the mapping algorithm choose.")
+#                  portal.ParameterType.STRING, "", advanced=True,
+#                 longDescription="Input the name of a PhantomNet UE node to allocate (e.g., 'ue4').  Leave blank to let the mapping algorithm choose.")
 pc.defineParameter("FIXED_ENB", "Bind to a specific eNodeB",
                    portal.ParameterType.STRING, "", advanced=True,
                    longDescription="Input the name of a PhantomNet eNodeB device to allocate (e.g., 'nuc1').  Leave blank to let the mapping algorithm choose.  If you bind both UE and eNodeB devices, mapping will fail unless there is path between them via the attenuator matrix.")
@@ -188,17 +188,7 @@ else:
     rue3.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
     rue3.adb_target = "adb-tgt"
     rue3_enb1_rf = rue3.addInterface("enb3_rf")
-"""
-    # Add an OTS (Nexus 5) UE 4
-    rue4 = request.UE("rue4")
-    if params.FIXED_UE4:
-        rue4.component_id = params.FIXED_UE4
-    rue4.hardware_type = GLOBALS.UE_HWTYPE
-    rue4.disk_image = GLOBALS.UE_IMG
-    rue4.Desire("rf-radiated" if params.TYPE == "ota" else "rf-controlled", 1)
-    rue4.adb_target = "adb-tgt"
-    rue4_enb1_rf = rue4.addInterface("enb4_rf")
-"""
+
     # Create the RF link between each Nexus 5 UE and eNodeB
     rflink1 = request.RFLink("rflink1")
     rflink1.addInterface(enb1_rue1_rf)
