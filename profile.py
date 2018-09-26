@@ -142,6 +142,7 @@ if params.TYPE == "sim":
 else:
     # Add a node to act as the ADB target host
     adb_t = request.RawPC("adb-tgt")
+    adb_t.hardware_type = 'd710'
     adb_t.disk_image = GLOBALS.ADB_IMG
 
     # Add a NUC eNB node.
@@ -218,6 +219,7 @@ else:
 
 # Add OAI EPC (HSS, MME, SPGW) node.
 epc = request.RawPC("epc")
+epc.hardware_type = 'd710'
 epc.disk_image = GLOBALS.OAI_EPC_IMG
 epc.addService(rspec.Execute(shell="sh", command=GLOBALS.OAI_CONF_SCRIPT + " -r EPC"))
 connectOAI_DS(epc, 0)
